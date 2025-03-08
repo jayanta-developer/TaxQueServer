@@ -1,5 +1,18 @@
 import mongoose from "mongoose";
 
+const FAQItem = new mongoose.Schema({
+  question: {
+    type: {
+      type: String,
+      required: true,
+    },
+  },
+  answer: {
+    type: String,
+    required: true,
+  },
+});
+
 const ServiceSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -9,7 +22,7 @@ const ServiceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  image: {
+  imageUrl: {
     type: String,
     required: true,
   },
@@ -19,6 +32,7 @@ const ServiceSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  FAQ: [FAQItem],
 });
 
-module.exports = mongoose.model("Blog", ServiceSchema);
+module.exports = mongoose.model("Service", ServiceSchema);

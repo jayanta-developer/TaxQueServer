@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Service from "../Module/service";
+const Service = require("../Module/service");
 
 // Create a new service
 export const createService = async (req: Request, res: Response) => {
@@ -11,7 +11,7 @@ export const createService = async (req: Request, res: Response) => {
     const newService = new Service({
       title,
       summery,
-      image: imageUrl,
+      imageUrl,
       products,
     });
     await newService.save();
@@ -41,6 +41,23 @@ export const getServiceById = async (req: Request, res: Response) => {
     if (!service) return res.status(404).json({ message: "Service not found" });
 
     res.status(200).json(service);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// Get a single service by ID
+export const updateServiceById = async (req: Request, res: Response) => {
+  try {
+    const updateService = await Service.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!updateService)
+      return res.status(404).json({ message: "Service not found" });
+
+    res.status(200).json(updateService);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }

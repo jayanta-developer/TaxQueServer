@@ -3,7 +3,15 @@ import passport from "passport";
 
 const router = express.Router();
 const { sendOTP, verifyOTP } = require("../Controller/otpAuth");
+const {
+  createService,
+  getAllServices,
+  getServiceById,
+  deleteService,
+  updateServiceById,
+} = require("../Controller/service");
 
+//OTP Loging
 router.post("/send-otp", sendOTP);
 router.post("/verify-otp", verifyOTP);
 
@@ -36,5 +44,12 @@ router.get(
     res.json(req.user as any);
   }
 );
+
+//service route
+router.post("/service/create", createService);
+router.get("/service", getAllServices);
+router.get("/service/:id", getServiceById);
+router.get("/service/delete/:id", deleteService);
+router.post("/service/update/:id", updateServiceById);
 
 export default router;

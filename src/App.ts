@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import authRoutes from "./Router/index";
+import Routes from "./Router/index";
 import passport from "passport";
 import session from "express-session";
 const mongoose = require("mongoose");
@@ -11,10 +11,6 @@ const mongoose = require("mongoose");
 dotenv.config();
 const app = express();
 
-// const DB = process.env.DATABASE.replace(
-//   "<db_password>",
-//   process.env.DATABASE_PASSWORD
-// );
 mongoose
   .connect(process.env.DATABASE, {})
   .then(() => console.log("Database connected successful!"))
@@ -40,9 +36,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api/auth", authRoutes);
-app.get("/", (req, res) => {
-  res.send("from server");
-});
+app.use("/taxque/api", Routes);
 
 module.exports = app;
