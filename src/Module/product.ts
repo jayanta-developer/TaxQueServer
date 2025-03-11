@@ -5,18 +5,18 @@ const BenefitsType = new mongoose.Schema({
     type: String,
     required: true,
   },
-  summerys: [
+  summarys: [
     {
       type: String,
     },
   ],
   BenefitItems: [
     {
-      title: {
+      title: {  
         type: String,
         required: true,
       },
-      summery: {
+      summary: {
         type: String,
         required: true,
       },
@@ -29,7 +29,7 @@ const keyFeatureType = new mongoose.Schema({
     type: String,
     required: true,
   },
-  summerys: [
+  summarys: [
     {
       type: String,
     },
@@ -40,7 +40,7 @@ const keyFeatureType = new mongoose.Schema({
         type: String,
         required: true,
       },
-      summery: {
+      summary: {
         type: String,
         required: true,
       },
@@ -53,7 +53,7 @@ const overViewType = new mongoose.Schema({
     type: String,
     required: true,
   },
-  summerys: [
+  summarys: [
     {
       type: String,
     },
@@ -72,7 +72,7 @@ const productPriceItem = new mongoose.Schema({
     type: String,
     required: true,
   },
-  summery: {
+  summary: {
     type: String,
     required: true,
   },
@@ -88,12 +88,12 @@ const productPriceItem = new mongoose.Schema({
   },
 });
 
-const SummeryItem = new mongoose.Schema({
+const SummaryItem = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
-  summery: {
+  summary: {
     type: String,
     required: true,
   },
@@ -116,7 +116,7 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  feturePoints: [SummeryItem],
+  feturePoints: [SummaryItem],
   priceData: [productPriceItem],
   overView: [overViewType],
   keyFeatures: [keyFeatureType],

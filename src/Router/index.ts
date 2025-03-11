@@ -2,7 +2,10 @@ import express from "express";
 import passport from "passport";
 
 const router = express.Router();
+//auth
 const { sendOTP, verifyOTP } = require("../Controller/otpAuth");
+
+//service
 const {
   createService,
   getAllServices,
@@ -10,6 +13,13 @@ const {
   deleteService,
   updateServiceById,
 } = require("../Controller/service");
+
+//Product
+const {
+  createProduct,
+  getAllProducts,
+  updateProduct,
+} = require("../Controller/product");
 
 //OTP Loging
 router.post("/send-otp", sendOTP);
@@ -51,5 +61,10 @@ router.get("/service", getAllServices);
 router.get("/service/:id", getServiceById);
 router.get("/service/delete/:id", deleteService);
 router.post("/service/update/:id", updateServiceById);
+
+//product route
+router.post("/product/create", createProduct);
+router.get("/products", getAllProducts);
+router.post("/product/update/:id", updateProduct);
 
 export default router;
