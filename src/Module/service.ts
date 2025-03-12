@@ -2,10 +2,8 @@ import mongoose from "mongoose";
 
 const FAQItem = new mongoose.Schema({
   question: {
-    type: {
-      type: String,
-      required: true,
-    },
+    type: String,
+    required: true,
   },
   answer: {
     type: String,
@@ -18,7 +16,7 @@ const ServiceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  summery: {
+  summary: {
     type: String,
     required: true,
   },
