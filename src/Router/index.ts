@@ -59,7 +59,7 @@ router.get(
 router.post("/service/create", createService);
 router.get("/service", getAllServices);
 router.get("/service/:id", getServiceById);
-router.get("/service/delete/:id", deleteService);
+router.post("/service/delete/:id", deleteService);
 router.post("/service/update/:id", updateServiceById);
 
 //product route

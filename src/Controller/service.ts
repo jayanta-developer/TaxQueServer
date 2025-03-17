@@ -4,8 +4,8 @@ const Service = require("../Module/service");
 // Create a new service
 export const createService = async (req: Request, res: Response) => {
   try {
-    const { title, summary, products, imageUrl } = req.body;
-    if (!title || !summary || !imageUrl || !products) {
+    const { title, summary, products, imageUrl, FAQ } = req.body;
+    if (!title || !summary || !imageUrl || !products || !FAQ) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const newService = new Service({
@@ -13,6 +13,7 @@ export const createService = async (req: Request, res: Response) => {
       summary,
       imageUrl,
       products,
+      FAQ,
     });
     await newService.save();
 
@@ -21,6 +22,7 @@ export const createService = async (req: Request, res: Response) => {
       .json({ message: "Service created successfully", service: newService });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
+    console.log(error);
   }
 };
 
