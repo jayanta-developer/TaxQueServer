@@ -18,7 +18,7 @@ export const createProduct = async (req: Request, res: Response) => {
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const products = await Product.find();
-    res.status(200).json({ success: true, products });
+    res.status(200).json(products);
   } catch (error) {
     res
       .status(500)
@@ -53,6 +53,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       overView,
       keyFeatures,
       benefits,
+      FAQ,
     } = req.body;
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -67,6 +68,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         overView,
         keyFeatures,
         benefits,
+        FAQ,
       },
       { new: true }
     );

@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const FAQItem = new mongoose.Schema({
+  question: {
+    type: String,
+    required: true,
+  },
+  answer: {
+    type: String,
+    required: true,
+  },
+});
+
 const BenefitsType = new mongoose.Schema({
   title: {
     type: String,
@@ -12,7 +23,7 @@ const BenefitsType = new mongoose.Schema({
   ],
   BenefitItems: [
     {
-      title: {  
+      title: {
         type: String,
         required: true,
       },
@@ -113,14 +124,15 @@ const ProductSchema = new mongoose.Schema({
     require: true,
   },
   category: {
-    type: String,
-    require: true,
+    title: String,
+    Id: String,
   },
   feturePoints: [SummaryItem],
   priceData: [productPriceItem],
   overView: [overViewType],
   keyFeatures: [keyFeatureType],
   benefits: [BenefitsType],
+  FAQ: [FAQItem],
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
