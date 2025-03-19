@@ -19,6 +19,8 @@ const {
   createProduct,
   getAllProducts,
   updateProduct,
+  AddFAQ,
+  DeleteFAQ,
 } = require("../Controller/product");
 
 //OTP Loging
@@ -66,5 +68,7 @@ router.post("/service/update/:id", updateServiceById);
 router.post("/product/create", createProduct);
 router.get("/products", getAllProducts);
 router.post("/product/update/:id", updateProduct);
+router.post("/product/faq/update/:id", AddFAQ);
+router.post("/product/faq/delete", DeleteFAQ);
 
 export default router;

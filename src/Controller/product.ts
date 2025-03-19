@@ -99,3 +99,49 @@ export const deleteProduct = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: "Error deleting product" });
   }
 };
+
+//Create FAQ
+export const AddFAQ = async (req: Request, res: Response) => {
+  try {
+    const { question, answer } = req.body;
+
+    if (!question || !answer) {
+      return res
+        .status(400)
+        .json({ message: "Question and answer are required." });
+    }
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    product.FAQ.push({ question, answer });
+    await product.save();
+
+    res.status(201).json({ message: "FAQ added successfully.", product });
+  } catch (error) {
+    res.status(500).json({ message: "Error adding FAQ.", error });
+  }
+};
+
+// Delete FAQ
+export const DeleteFAQ = async (req: Request, res: Response) => {
+  try {
+    const { productId, faqId } = req.body;
+
+    const product = await Product.findByIdAndUpdate(
+      productId,
+      { $pull: { FAQ: { _id: faqId } } },
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    res.status(200).json({ message: "FAQ deleted successfully.", product });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting FAQ.", error });
+  }
+};
