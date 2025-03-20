@@ -125,6 +125,32 @@ export const AddFAQ = async (req: Request, res: Response) => {
   }
 };
 
+// Update an existing FAQ
+export const updateFAQ = async (req: Request, res: Response) => {
+  try {
+    const { question, answer, productId, faqId } = req.body;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    const faq = product.FAQ.id(faqId);
+    if (!faq) {
+      return res.status(404).json({ message: "FAQ not found." });
+    }
+
+    if (question) faq.question = question;
+    if (answer) faq.answer = answer;
+
+    await product.save();
+
+    res.status(200).json({ message: "FAQ updated successfully.", product });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating FAQ.", error });
+  }
+};
+
 // Delete FAQ
 export const DeleteFAQ = async (req: Request, res: Response) => {
   try {

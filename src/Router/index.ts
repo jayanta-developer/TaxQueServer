@@ -20,6 +20,7 @@ const {
   getAllProducts,
   updateProduct,
   AddFAQ,
+  updateFAQ,
   DeleteFAQ,
 } = require("../Controller/product");
 
@@ -68,7 +69,8 @@ router.post("/service/update/:id", updateServiceById);
 router.post("/product/create", createProduct);
 router.get("/products", getAllProducts);
 router.post("/product/update/:id", updateProduct);
-router.post("/product/faq/update/:id", AddFAQ);
+router.post("/product/faq/add/:id", AddFAQ);
+router.post("/product/faq/update", updateFAQ);
 router.post("/product/faq/delete", DeleteFAQ);
 
 export default router;
