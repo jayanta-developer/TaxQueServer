@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node index.js",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
@@ -14,7 +14,7 @@
   "dependencies": {
     "@types/express-session": "^1.18.1",
     "bcryptjs": "^3.0.2",
-    "body-parser": "^1.20.3",    
+    "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -35,7 +35,7 @@
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@types/jsonwebtoken": "^9.0.9",    
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.9",
     "@types/nodemailer": "^6.4.17",
     "@types/passport-facebook": "^3.0.3",
