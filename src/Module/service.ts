@@ -12,7 +12,11 @@ const ServiceSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
     required: true,
-  },  
+  },
+  category: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Service", ServiceSchema);

@@ -45,7 +45,6 @@ export const updateProduct = async (req: Request, res: Response) => {
   try {
     const {
       title,
-      imageUrl,
       rating,
       category,
       feturePoints,
@@ -60,7 +59,6 @@ export const updateProduct = async (req: Request, res: Response) => {
       req.params.id,
       {
         title,
-        imageUrl,
         rating,
         category,
         feturePoints,
