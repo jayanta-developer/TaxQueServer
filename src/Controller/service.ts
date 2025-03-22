@@ -4,8 +4,24 @@ const Service = require("../Module/service");
 // Create a new service
 export const createService = async (req: Request, res: Response) => {
   try {
-    const { title, summary, imageUrl, category } = req.body;
-    if (!title || !summary || !imageUrl || !category) {
+    const {
+      title,
+      summary,
+      imageUrl,
+      category,
+      imgAltTag,
+      metaTitle,
+      metaDescription,
+    } = req.body;
+    if (
+      !title ||
+      !summary ||
+      !imageUrl ||
+      !category ||
+      !imgAltTag ||
+      !metaTitle ||
+      !metaDescription
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const newService = new Service({
@@ -13,6 +29,9 @@ export const createService = async (req: Request, res: Response) => {
       summary,
       imageUrl,
       category,
+      imgAltTag,
+      metaTitle,
+      metaDescription,
     });
     await newService.save();
 

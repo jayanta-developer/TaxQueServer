@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { title } from "node:process";
 
 const FAQItem = new mongoose.Schema({
   question: {
@@ -60,15 +61,15 @@ const keyFeatureType = new mongoose.Schema({
 });
 
 const overViewType = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
   summarys: [
     {
       type: String,
     },
   ],
+  title: {
+    type: String,
+    required: true,
+  },
 });
 const productPriceItem = new mongoose.Schema({
   title: {
@@ -129,6 +130,14 @@ const ProductSchema = new mongoose.Schema({
   keyFeatures: [keyFeatureType],
   benefits: [BenefitsType],
   FAQ: [FAQItem],
+  metaTitle: {
+    type: String,
+    required: true,
+  },
+  metaDescription: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
