@@ -125,10 +125,10 @@ const ProductSchema = new mongoose.Schema({
     Id: String,
   },
   feturePoints: [SummaryItem],
-  priceData: [productPriceItem],
   overView: [overViewType],
   keyFeatures: [keyFeatureType],
   benefits: [BenefitsType],
+  priceData: [productPriceItem],
   FAQ: [FAQItem],
   metaTitle: {
     type: String,
