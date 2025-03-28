@@ -102,6 +102,8 @@ export const deleteProduct = async (req: Request, res: Response) => {
 export const AddFAQ = async (req: Request, res: Response) => {
   try {
     const { question, answer } = req.body;
+    const { id } = req.params;
+    console.log(id);
 
     if (!question || !answer) {
       return res
@@ -109,16 +111,19 @@ export const AddFAQ = async (req: Request, res: Response) => {
         .json({ message: "Question and answer are required." });
     }
 
-    const product = await Product.findById(req.params.id);
-    if (!product) {
+    const updatedProduct = await Product.updateOne(
+      { _id: id },
+      { $push: { FAQ: { question, answer } } }
+    );
+
+    if (updatedProduct.modifiedCount === 0) {
       return res.status(404).json({ message: "Product not found." });
     }
-
-    product.FAQ.push({ question, answer });
-    await product.save();
-
-    res.status(201).json({ message: "FAQ added successfully.", product });
+    res
+      .status(201)
+      .json({ message: "FAQ added successfully.", updatedProduct });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error adding FAQ.", error });
   }
 };
@@ -128,23 +133,33 @@ export const updateFAQ = async (req: Request, res: Response) => {
   try {
     const { question, answer, productId, faqId } = req.body;
 
-    const product = await Product.findById(productId);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found." });
+    if (!question && !answer) {
+      return res.status(400).json({
+        message: "At least one field (question or answer) is required.",
+      });
     }
 
-    const faq = product.FAQ.id(faqId);
-    if (!faq) {
-      return res.status(404).json({ message: "FAQ not found." });
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: productId, "FAQ._id": faqId }, // Find product with matching FAQ
+      {
+        $set: {
+          "FAQ.$.question": question,
+          "FAQ.$.answer": answer,
+        },
+      },
+      { new: true, runValidators: false } // Prevent full schema validation
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product or FAQ not found." });
     }
 
-    if (question) faq.question = question;
-    if (answer) faq.answer = answer;
-
-    await product.save();
-
-    res.status(200).json({ message: "FAQ updated successfully.", product });
+    res.status(200).json({
+      message: "FAQ updated successfully.",
+      updatedFAQ: updatedProduct.FAQ,
+    });
   } catch (error) {
+    console.error("Error updating FAQ:", error);
     res.status(500).json({ message: "Error updating FAQ.", error });
   }
 };
