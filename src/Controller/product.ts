@@ -103,7 +103,6 @@ export const AddFAQ = async (req: Request, res: Response) => {
   try {
     const { question, answer } = req.body;
     const { id } = req.params;
-    console.log(id);
 
     if (!question || !answer) {
       return res
@@ -182,5 +181,94 @@ export const DeleteFAQ = async (req: Request, res: Response) => {
     res.status(200).json({ message: "FAQ deleted successfully.", product });
   } catch (error) {
     res.status(500).json({ message: "Error deleting FAQ.", error });
+  }
+};
+
+//Add Price
+export const AddPriceItem = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { title, basicPrice, price, summary, fetures, MostPopular } =
+      req.body;
+
+    if (!title || !basicPrice || !price || !summary || !fetures) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+    const GetProduct = await Product.updateOne(
+      { _id: id },
+      {
+        $push: {
+          priceData: {
+            title,
+            basicPrice,
+            price,
+            summary,
+            fetures,
+            MostPopular,
+          },
+        },
+      }
+    );
+
+    if (GetProduct.modifiedCount === 0) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    res.status(201).json({ message: "Price item added successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error adding price item.", error });
+  }
+};
+
+export const UpdatePrice = async (req: Request, res: Response) => {
+  try {
+    const { id, priceItemId } = req.params;
+    const { title, basicPrice, price, summary, fetures, MostPopular } =
+      req.body;
+
+    const updateResult = await Product.updateOne(
+      { _id: id, "priceData._id": priceItemId },
+      {
+        $set: {
+          "priceData.$.title": title,
+          "priceData.$.basicPrice": basicPrice,
+          "priceData.$.price": price,
+          "priceData.$.summary": summary,
+          "priceData.$.fetures": fetures,
+          "priceData.$.MostPopular": MostPopular,
+        },
+      }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Product or Price Item not found." });
+    }
+
+    res.status(200).json({ message: "Price item updated successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating price item.", error });
+  }
+};
+
+export const DeletePricePlan = async (req: Request, res: Response) => {
+  try {
+    const { id, priceItemId } = req.params;
+
+    const updateResult = await Product.updateOne(
+      { _id: id },
+      { $pull: { priceData: { _id: priceItemId } } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Product or Price Item not found." });
+    }
+
+    res.status(200).json({ message: "Price item deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting price item.", error });
   }
 };

@@ -204,13 +204,12 @@ const productPriceItem = new mongoose.Schema({
   },
   fetures: [
     {
-      type: String,
+      type: String,   
       required: true,
     },
   ],
   MostPopular: {
     type: Boolean,
-    required: true,
   },
 });
 
