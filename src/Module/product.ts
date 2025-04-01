@@ -204,7 +204,7 @@ const productPriceItem = new mongoose.Schema({
   },
   fetures: [
     {
-      type: String,   
+      type: String,
       required: true,
     },
   ],
@@ -243,7 +243,7 @@ const ProductSchema = new mongoose.Schema({
     },
   },
   feturePoints: [SummaryItem],
-  overView: [overViewType],
+  overView: overViewType,
   whatIs: {
     summarys: [
       {

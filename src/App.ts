@@ -8,6 +8,12 @@ import passport from "passport";
 import session from "express-session";
 const mongoose = require("mongoose");
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://your-production-site.com",
+];
+
 dotenv.config();
 const app = express();
 
@@ -22,7 +28,18 @@ mongoose
   );
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(cookieParser());
 // app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));

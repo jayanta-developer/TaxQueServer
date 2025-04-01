@@ -28,6 +28,23 @@ const {
   DeletePricePlan,
 } = require("../Controller/product");
 
+//User
+const {
+  createUser,
+  GetUsers,
+  UpdateUser,
+  DeleteUser,
+  GetUserByEmail,
+} = require("../Controller/user");
+
+//Blog
+const {
+  createBlog,
+  GetBlogs,
+  UpdateBlog,
+  DeleteBlog,
+} = require("../Controller/blog");
+
 //OTP Loging
 router.post("/send-otp", sendOTP);
 router.post("/verify-otp", verifyOTP);
@@ -80,5 +97,18 @@ router.post("/product/faq/delete", DeleteFAQ);
 router.post("/product/price/add/:id", AddPriceItem);
 router.post("/product/price/update/:id/:priceItemId", UpdatePrice);
 router.post("/product/price/delete/:id/:priceItemId", DeletePricePlan);
+
+//User
+router.post("/user/create", createUser);
+router.get("/users", GetUsers);
+router.post("/user/update/:id", UpdateUser);
+router.post("/user/delete/:id", DeleteUser);
+router.post("/user/get-by-email", GetUserByEmail);
+
+//Blos
+router.post("/blog/create", createBlog);
+router.get("/blogs", GetBlogs);
+router.post("/blog/update/:id", UpdateBlog);
+router.post("/blog/delete/:id", DeleteBlog);
 
 export default router;
