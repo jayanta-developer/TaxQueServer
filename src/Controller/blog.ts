@@ -3,7 +3,6 @@ const Blog = require("../Module/blog");
 
 export const createBlog = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
     const blogIput = new Blog(req.body);
     await blogIput.save();
 
@@ -18,7 +17,7 @@ export const createBlog = async (req: Request, res: Response) => {
 export const GetBlogs = async (req: Request, res: Response) => {
   try {
     const blogs = await Blog.find();
-    res.status(200).json({ success: true, user: blogs });
+    res.status(200).json({ success: true, blog: blogs });
   } catch (error) {
     res
       .status(500)
