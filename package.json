@@ -2,11 +2,11 @@
   "name": "taxqueserver",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index.ts",
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node dist/index.js",
+    "start": "node dist/index.ts",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
