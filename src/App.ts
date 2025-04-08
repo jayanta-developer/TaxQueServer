@@ -40,6 +40,7 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 // app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));

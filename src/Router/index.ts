@@ -45,6 +45,9 @@ const {
   DeleteBlog,
 } = require("../Controller/blog");
 
+//Payments
+// const { PaymentOrder } = require("../Controller/payment");
+
 //OTP Loging
 router.post("/send-otp", sendOTP);
 router.post("/verify-otp", verifyOTP);
@@ -110,5 +113,8 @@ router.post("/blog/create", createBlog);
 router.get("/blogs", GetBlogs);
 router.post("/blog/update/:id", UpdateBlog);
 router.post("/blog/delete/:id", DeleteBlog);
+
+//Payments
+// router.post("/create-order", PaymentOrder);
 
 export default router;
