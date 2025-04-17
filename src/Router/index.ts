@@ -46,7 +46,11 @@ const {
 } = require("../Controller/blog");
 
 //Payments
-// const { PaymentOrder } = require("../Controller/payment");
+const {
+  PaymentOrder,
+  VerifyPayment,
+  getInvoice,
+} = require("../Controller/payment");
 
 //OTP Loging
 router.post("/send-otp", sendOTP);
@@ -115,6 +119,8 @@ router.post("/blog/update/:id", UpdateBlog);
 router.post("/blog/delete/:id", DeleteBlog);
 
 //Payments
-// router.post("/create-order", PaymentOrder);
+router.post("/create-order", PaymentOrder);
+router.post("/verify-payment", VerifyPayment);
+router.post("/send-invoice", getInvoice);
 
 export default router;
