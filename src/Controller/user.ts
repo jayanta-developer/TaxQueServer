@@ -35,6 +35,17 @@ export const GetUserByEmail = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal server error", error: error });
   }
 };
+export const GetUserById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findOne({ _id: id });
+    res.status(200).json({ success: true, user: user });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", error: error });
+  }
+};
 
 export const UpdateUser = async (req: Request, res: Response) => {
   try {

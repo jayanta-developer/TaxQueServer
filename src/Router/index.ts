@@ -35,6 +35,7 @@ const {
   UpdateUser,
   DeleteUser,
   GetUserByEmail,
+  GetUserById,
 } = require("../Controller/user");
 
 //Blog
@@ -44,6 +45,9 @@ const {
   UpdateBlog,
   DeleteBlog,
 } = require("../Controller/blog");
+
+//file
+const { HandleFile } = require("../Controller/fileHandler");
 
 //Payments
 const {
@@ -111,8 +115,9 @@ router.get("/users", GetUsers);
 router.post("/user/update/:id", UpdateUser);
 router.post("/user/delete/:id", DeleteUser);
 router.post("/user/get-by-email", GetUserByEmail);
+router.get("/user/get-by-id/:id", GetUserById);
 
-//Blos
+//Blos-
 router.post("/blog/create", createBlog);
 router.get("/blogs", GetBlogs);
 router.post("/blog/update/:id", UpdateBlog);
@@ -122,5 +127,8 @@ router.post("/blog/delete/:id", DeleteBlog);
 router.post("/create-order", PaymentOrder);
 router.post("/verify-payment", VerifyPayment);
 router.post("/send-invoice", getInvoice);
+
+//file
+router.post("/blob", HandleFile);
 
 export default router;
