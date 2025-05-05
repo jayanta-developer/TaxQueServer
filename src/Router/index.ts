@@ -129,6 +129,6 @@ router.post("/verify-payment", VerifyPayment);
 router.post("/send-invoice", getInvoice);
 
 //file
-router.post("/blob", HandleFile);
+router.post("/blob", express.raw({ type: "*/*" }), HandleFile);
 
 export default router;

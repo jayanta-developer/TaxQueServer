@@ -7,7 +7,6 @@ import Routes from "./Router/index";
 import passport from "passport";
 import session from "express-session";
 const mongoose = require("mongoose");
-import { put } from "@vercel/blob";
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -30,6 +29,7 @@ mongoose
 
 app.use(express.json());
 app.use(express.raw({ type: "*/*" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: function (origin, callback) {

@@ -10,7 +10,7 @@ const product = new mongoose.Schema({
     {
       docTitle: String,
       docUrl: String,
-      status: Boolean,
+      status: String,
       rejectMessage: String,
     },
   ],

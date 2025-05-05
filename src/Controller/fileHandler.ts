@@ -1,5 +1,5 @@
-import { put } from "@vercel/blob";
 import { Request, Response } from "express";
+import { put } from "@vercel/blob";
 
 export const HandleFile = async (req: Request, res: Response) => {
   const { filename } = req.query;
@@ -7,9 +7,8 @@ export const HandleFile = async (req: Request, res: Response) => {
   if (!filename || typeof filename !== "string") {
     return res.status(400).json({ error: "Filename must be a string" });
   }
-
   try {
-    const blob = await put(filename, req, {
+    const blob = await put(filename, req.body, {
       access: "public",
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
