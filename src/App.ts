@@ -7,6 +7,8 @@ import Routes from "./Router/index";
 import passport from "passport";
 import session from "express-session";
 const mongoose = require("mongoose");
+import { raw } from "express";
+import { HandleFile } from "./Controller/fileHandler";
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -27,8 +29,8 @@ mongoose
     )
   );
 
-app.use(express.json());
-app.use(express.raw({ type: "*/*" }));
+app.use(express.json({ limit: "5mb" }));
+app.use(express.raw({ type: "*/*", limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
@@ -55,6 +57,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.post("/taxque/api/blob", raw({ type: "*/*", limit: "5mb" }), HandleFile);
 
 app.use("/taxque/api", Routes);
 
