@@ -36,6 +36,9 @@ const {
   DeleteUser,
   GetUserByEmail,
   GetUserById,
+  UpdateProductDoc,
+  CreateContactUser,
+  GetContactUsers
 } = require("../Controller/user");
 
 //Blog
@@ -116,6 +119,11 @@ router.post("/user/update/:id", UpdateUser);
 router.post("/user/delete/:id", DeleteUser);
 router.post("/user/get-by-email", GetUserByEmail);
 router.get("/user/get-by-id/:id", GetUserById);
+router.post("/user/update_doc/:userId/:productId", UpdateProductDoc);
+//Contact
+router.post("/contact-user/create", CreateContactUser);
+router.get("/contact-user", GetContactUsers);
+
 
 //Blos-
 router.post("/blog/create", createBlog);

@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 const User = require("../Module/User");
+const ContactUser = require("../Module/ContactUser")
+
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -68,5 +70,60 @@ export const DeleteUser = async (req: Request, res: Response) => {
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
+  }
+};
+export const UpdateProductDoc = async (req: Request, res: Response) => {
+  try {
+    const { userId, productId } = req.params;
+    const updateData = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Find the product by _id inside the purchase array
+    const product = user.purchase.id(productId);
+    if (!product) {
+      return res
+        .status(404)
+        .json({ message: "Product not found in user's purchase history." });
+    }
+
+    product.requireDoc.push(...updateData);
+    await user.save();
+    res.status(200).json({
+      message: "Document added to requireDoc successfully.",
+      updatedRequireDoc: product.requireDoc,
+    });
+  } catch (error) {
+    console.error("Error updating purchased product DOC:", error);
+    res.status(500).json({ message: "Server error.", error });
+  }
+};
+
+
+
+// Contact user 
+export const CreateContactUser = async (req: Request, res: Response) => {
+  try {
+    const userIput = new ContactUser(req.body);
+    await userIput.save();
+
+    res.status(201).json({ success: true, user: userIput });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", error: error });
+  }
+};
+export const GetContactUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await ContactUser.find();
+    res.status(200).json({ success: true, user: users });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", error: error });
   }
 };
