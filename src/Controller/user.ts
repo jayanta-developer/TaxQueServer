@@ -127,3 +127,39 @@ export const GetContactUsers = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal server error", error: error });
   }
 };
+
+
+
+export const UpdateRejectMessage = async (req: Request, res: Response) => {
+  const { userId, productId, docId, newMessage } = req.body;
+
+  try {
+    const result = await User.updateOne(
+      {
+        _id: userId,
+        "purchase.productId": productId,
+        "purchase.requireDoc._id": docId,
+      },
+      {
+        $set: {
+          "purchase.$[p].requireDoc.$[d].rejectMessage": newMessage,
+        },
+      },
+      {
+        arrayFilters: [
+          { "p.productId": productId },
+          { "d._id": docId },
+        ],
+      }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "Document not found or not updated" });
+    }
+
+    res.status(200).json({ message: "Reject message updated successfully" });
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
