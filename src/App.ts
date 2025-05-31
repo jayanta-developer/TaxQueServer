@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+dotenv.config();
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import Routes from "./Router/index";
@@ -16,7 +17,6 @@ const allowedOrigins = [
   "https://your-production-site.com",
 ];
 
-dotenv.config();
 const app = express();
 
 mongoose

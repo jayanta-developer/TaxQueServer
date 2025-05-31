@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import Razorpay from "razorpay";
-import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
+import Razorpay from "razorpay";
+import crypto from "crypto";
 const User = require("../Module/User");
 
 const razorpay = new Razorpay({
@@ -13,7 +13,6 @@ const razorpay = new Razorpay({
 // Create Razorpay Order
 export const PaymentOrder = async (req: Request, res: Response) => {
   const { amount, serviceId } = req.body;
-
   const options = {
     amount: amount * 100,
     currency: "INR",

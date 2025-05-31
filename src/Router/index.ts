@@ -2,6 +2,15 @@ import express from "express";
 import passport from "passport";
 
 const router = express.Router();
+
+//Payments
+const {
+  PaymentOrder,
+  VerifyPayment,
+  getInvoice,
+} = require("../Controller/payment");
+
+
 //auth
 const { sendOTP, verifyOTP } = require("../Controller/otpAuth");
 
@@ -53,12 +62,6 @@ const {
 //file
 const { HandleFile } = require("../Controller/fileHandler");
 
-//Payments
-const {
-  PaymentOrder,
-  VerifyPayment,
-  getInvoice,
-} = require("../Controller/payment");
 
 //OTP Loging
 router.post("/send-otp", sendOTP);
