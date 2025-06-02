@@ -48,7 +48,8 @@ const {
   UpdateProductDoc,
   CreateContactUser,
   GetContactUsers,
-  UpdateRejectMessage
+  UpdateRejectMessage,
+  UpdateDoc
 } = require("../Controller/user");
 
 //Blog
@@ -124,7 +125,8 @@ router.post("/user/delete/:id", DeleteUser);
 router.post("/user/get-by-email", GetUserByEmail);
 router.get("/user/get-by-id/:id", GetUserById);
 router.post("/user/update_doc/:userId/:productId", UpdateProductDoc);
-router.post("/user/update_doc_message/", UpdateRejectMessage);
+router.post("/user/update_doc_message", UpdateRejectMessage);
+router.post("/user/update_doc_url", UpdateDoc);
 //Contact
 router.post("/contact-user/create", CreateContactUser);
 router.get("/contact-user", GetContactUsers);

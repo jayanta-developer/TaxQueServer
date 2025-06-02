@@ -131,7 +131,7 @@ export const GetContactUsers = async (req: Request, res: Response) => {
 
 
 export const UpdateRejectMessage = async (req: Request, res: Response) => {
-  const { userId, productId, docId, newMessage } = req.body;
+  const { userId, productId, docId, newMessage, status } = req.body;
 
   try {
     const result = await User.updateOne(
@@ -143,6 +143,7 @@ export const UpdateRejectMessage = async (req: Request, res: Response) => {
       {
         $set: {
           "purchase.$[p].requireDoc.$[d].rejectMessage": newMessage,
+          "purchase.$[p].requireDoc.$[d].status": status,
         },
       },
       {
@@ -158,6 +159,45 @@ export const UpdateRejectMessage = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ message: "Reject message updated successfully" });
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+export const UpdateDoc = async (req: Request, res: Response) => {
+  const { userId, productId, docId, newMessage, status, url } = req.body;
+
+  try {
+    const result = await User.updateOne(
+      {
+        _id: userId,
+        "purchase.productId": productId,
+        "purchase.requireDoc._id": docId,
+      },
+      { 
+        $set: {
+          "purchase.$[p].requireDoc.$[d].rejectMessage": newMessage,
+          "purchase.$[p].requireDoc.$[d].status": status,
+        },
+        $push: {
+          "purchase.$[p].requireDoc.$[d].docUrl": url,
+        },
+      },
+      {
+        arrayFilters: [
+          { "p.productId": productId },
+          { "d._id": docId },
+        ],
+      }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "Document URL not found or not updated" });
+    }
+
+    res.status(200).json({ message: "Doc url updated successfully" });
   } catch (error) {
     console.error("Update error:", error);
     res.status(500).json({ message: "Internal Server Error" });

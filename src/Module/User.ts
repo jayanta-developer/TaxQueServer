@@ -9,7 +9,7 @@ const product = new mongoose.Schema({
   requireDoc: [
     {
       docTitle: String,
-      docUrl: [],
+      docUrl: [String],
       status: String,
       rejectMessage: String,
     },
