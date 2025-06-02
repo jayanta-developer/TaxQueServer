@@ -176,7 +176,7 @@ export const UpdateDoc = async (req: Request, res: Response) => {
         "purchase.productId": productId,
         "purchase.requireDoc._id": docId,
       },
-      { 
+      {
         $set: {
           "purchase.$[p].requireDoc.$[d].rejectMessage": newMessage,
           "purchase.$[p].requireDoc.$[d].status": status,

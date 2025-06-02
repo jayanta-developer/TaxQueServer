@@ -7,9 +7,26 @@ import cookieParser from "cookie-parser";
 import Routes from "./Router/index";
 import passport from "passport";
 import session from "express-session";
+const https = require('https');
 const mongoose = require("mongoose");
+const fs = require('fs');
 import { raw } from "express";
 import { HandleFile } from "./Controller/fileHandler";
+const app = express();
+
+
+// SSL certificate paths
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/fullchain.pem', 'utf8');
+
+const credentials = {
+  key: privateKey,
+  cert: certificate
+};
+
+// Create HTTPS server
+const httpsServer = https.createServer(credentials, app);
+
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -17,7 +34,6 @@ const allowedOrigins = [
   "https://your-production-site.com",
 ];
 
-const app = express();
 
 mongoose
   .connect(process.env.DATABASE, {})
