@@ -7,7 +7,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start:prod": "node dist/index.ts",
-    "start": "npm start index.ts",
+    "start": "npm start index.ts", 
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
