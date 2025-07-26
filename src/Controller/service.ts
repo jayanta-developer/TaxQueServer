@@ -6,7 +6,6 @@ export const createService = async (req: Request, res: Response) => {
   try {
     const {
       title,
-      displayName,
       summary,
       imageUrl,
       category,
@@ -16,7 +15,6 @@ export const createService = async (req: Request, res: Response) => {
     } = req.body;
     if (
       !title ||
-      !displayName ||
       !summary ||
       !imageUrl ||
       !category ||
@@ -28,7 +26,6 @@ export const createService = async (req: Request, res: Response) => {
     }
     const newService = new Service({
       title,
-      displayName,
       summary,
       imageUrl,
       category,

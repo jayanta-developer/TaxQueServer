@@ -210,7 +210,7 @@ const productPriceItem = new mongoose.Schema({
   ],
   MostPopular: {
     type: Boolean,
-  }
+  },
 });
 
 const SummaryItem = new mongoose.Schema({
@@ -226,10 +226,6 @@ const SummaryItem = new mongoose.Schema({
 
 const ProductSchema = new mongoose.Schema({
   title: {
-    type: String,
-    required: true,
-  },
-  displayName: {
     type: String,
     required: true,
   },
@@ -289,9 +285,6 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  display: {
-    type: String
-  }
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
