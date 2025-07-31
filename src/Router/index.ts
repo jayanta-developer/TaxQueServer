@@ -60,6 +60,9 @@ const {
   DeleteBlog,
 } = require("../Controller/blog");
 
+//Team
+const { createTeam, getAllTeams, updateTeam, deleteTeam } = require("../Controller/team")
+
 //file
 const { HandleFile } = require("../Controller/fileHandler");
 
@@ -137,6 +140,12 @@ router.post("/blog/create", createBlog);
 router.get("/blogs", GetBlogs);
 router.post("/blog/update/:id", UpdateBlog);
 router.post("/blog/delete/:id", DeleteBlog);
+
+//Team
+router.post("/team/create", createTeam)
+router.get("/teams", getAllTeams)
+router.post("/team/update/:id", updateTeam)
+router.post("/team/delete/:id", deleteTeam)
 
 //Payments
 router.post("/create-order", PaymentOrder);
