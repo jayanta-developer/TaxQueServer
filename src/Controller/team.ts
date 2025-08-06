@@ -96,3 +96,25 @@ export const deleteTeam = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Team error", error });
   }
 };
+
+
+
+export const fix = async (req: Request, res: Response) => {
+  try {
+    const result = await Team.updateMany(
+      { "media.0.facebook": { $exists: true } },
+      [
+        {
+          $set: {
+            media: {
+              $arrayElemAt: ["$media", 0],
+            },
+          },
+        },
+      ]
+    );
+    res.status(200).json({ message: "Media field fixed", result });
+  } catch (error) {
+    res.status(500).json({ message: "Error fixing media", error });
+  }
+};

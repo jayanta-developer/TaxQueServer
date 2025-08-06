@@ -285,6 +285,11 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["active", "draft"],
+    default: "active"
+  }
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
