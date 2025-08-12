@@ -23,13 +23,15 @@ const dueDateType = new mongoose.Schema({
       type: String,
     },
   ],
-  tableData: [
-    {
-      quarter: String,
-      period: String,
-      TDSReturnDue: String,
-    },
-  ],
+  tableData: {
+    headers: [String],
+    rows: [
+      {
+        type: Map,
+        of: String
+      }
+    ]
+  },
 });
 const eligibilityType = new mongoose.Schema({
   title: {
@@ -69,14 +71,15 @@ const ComplianceType = new mongoose.Schema({
       type: String,
     },
   ],
-  tableData: [
-    {
-      aspect: String,
-      complianceRequirement: String,
-      frequency: String,
-      WhyImportant: String,
-    },
-  ],
+  tableData: {
+    headers: [String],
+    rows: [
+      {
+        type: Map,
+        of: String
+      }
+    ]
+  },
 });
 const docRequiredType = new mongoose.Schema({
   title: {
@@ -88,14 +91,15 @@ const docRequiredType = new mongoose.Schema({
       type: String,
     },
   ],
-  tableData: [
-    {
-      category: String,
-      documentType: String,
-      specificExamples: String,
-      Purpose: String,
-    },
-  ],
+  tableData: {
+    headers: [String],
+    rows: [
+      {
+        type: Map,
+        of: String
+      }
+    ]
+  },
 });
 const differenceType = new mongoose.Schema({
   title: {
@@ -107,16 +111,15 @@ const differenceType = new mongoose.Schema({
       type: String,
     },
   ],
-  tableData: [
-    {
-      KeyFeature: String,
-      PrivateLC: String,
-      PublicLC: String,
-      LLP: String,
-      SoleProprietorship: String,
-      PartnershipFirm: String,
-    },
-  ],
+  tableData: {
+    headers: [String],
+    rows: [
+      {
+        type: Map,
+        of: String
+      }
+    ]
+  }
 });
 const FAQItem = new mongoose.Schema({
   question: {
@@ -226,6 +229,10 @@ const SummaryItem = new mongoose.Schema({
 
 const ProductSchema = new mongoose.Schema({
   title: {
+    type: String,
+    required: true,
+  },
+  displayName: {
     type: String,
     required: true,
   },
