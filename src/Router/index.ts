@@ -63,6 +63,16 @@ const {
 //Team
 const { createTeam, getAllTeams, updateTeam, deleteTeam, fix } = require("../Controller/team")
 
+//Job
+const {
+  createJob,
+  getAllJobs,
+  getJobById,
+  updateJob,
+  deleteJob
+} = require("../Controller/job")
+
+
 //file
 const { HandleFile } = require("../Controller/fileHandler");
 
@@ -152,6 +162,13 @@ router.get("/team/fix", fix)
 router.post("/create-order", PaymentOrder);
 router.post("/verify-payment", VerifyPayment);
 router.post("/send-invoice", getInvoice);
+
+//Job
+router.post("/job/create", createJob);
+router.get("/jobs", getAllJobs);
+router.get("/job/:id", getJobById);
+router.post("/job/update", updateJob);
+router.post("/job/delete", deleteJob);
 
 //file
 // router.post("/blob", express.raw({ type: "*/*", limit: "50mb" }), HandleFile);

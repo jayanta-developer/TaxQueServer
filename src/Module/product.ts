@@ -201,6 +201,12 @@ const productPriceItem = new mongoose.Schema({
     type: String,
     required: true,
   },
+  plan: {
+    type: String,
+    required: true,
+    enum: ["Quarterly", "Monthly ", "Annually"],
+    default: "Monthly"
+  },
   summary: {
     type: String,
     required: true,
@@ -283,6 +289,7 @@ const ProductSchema = new mongoose.Schema({
   Steps: [stepsType],
 
   priceData: [productPriceItem],
+  display: String,
   FAQ: [FAQItem],
   metaTitle: {
     type: String,

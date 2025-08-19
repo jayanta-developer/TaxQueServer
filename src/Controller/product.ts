@@ -166,10 +166,10 @@ export const DeleteFAQ = async (req: Request, res: Response) => {
 export const AddPriceItem = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { title, basicPrice, price, summary, fetures, MostPopular } =
+    const { title, basicPrice, price, plan, summary, fetures, MostPopular } =
       req.body;
 
-    if (!title || !basicPrice || !price || !summary || !fetures) {
+    if (!title || !basicPrice || !price || !plan || !summary || !fetures) {
       return res.status(400).json({ message: "All fields are required." });
     }
     const GetProduct = await Product.updateOne(
@@ -180,6 +180,7 @@ export const AddPriceItem = async (req: Request, res: Response) => {
             title,
             basicPrice,
             price,
+            plan,
             summary,
             fetures,
             MostPopular,
@@ -201,7 +202,7 @@ export const AddPriceItem = async (req: Request, res: Response) => {
 export const UpdatePrice = async (req: Request, res: Response) => {
   try {
     const { id, priceItemId } = req.params;
-    const { title, basicPrice, price, summary, fetures, MostPopular } =
+    const { title, basicPrice, price, plan, summary, fetures, MostPopular } =
       req.body;
 
     const updateResult = await Product.updateOne(
@@ -211,6 +212,7 @@ export const UpdatePrice = async (req: Request, res: Response) => {
           "priceData.$.title": title,
           "priceData.$.basicPrice": basicPrice,
           "priceData.$.price": price,
+          "priceData.$.plan": plan,
           "priceData.$.summary": summary,
           "priceData.$.fetures": fetures,
           "priceData.$.MostPopular": MostPopular,
