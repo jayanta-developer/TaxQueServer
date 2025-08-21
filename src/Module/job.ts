@@ -31,12 +31,18 @@ const JobSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  deadline: {
-    type: Date,
+  jobLocation: {
+    type: String,
+    enum: ["on-site", "hybrid", "remote"],
+    required: true,
   },
-  remote: {
-    type: Boolean,
-    default: false,
+  metaTitle: {
+    type: String,
+    required: true,
+  },
+  metaDescription: {
+    type: String,
+    required: true,
   },
 });
 

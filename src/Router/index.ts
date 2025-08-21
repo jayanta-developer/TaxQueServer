@@ -72,6 +72,9 @@ const {
   deleteJob
 } = require("../Controller/job")
 
+//review
+// const { getAccounts } = require("../Controller/GoogleReview")
+
 
 //file
 const { HandleFile } = require("../Controller/fileHandler");
@@ -166,9 +169,12 @@ router.post("/send-invoice", getInvoice);
 //Job
 router.post("/job/create", createJob);
 router.get("/jobs", getAllJobs);
-router.get("/job/:id", getJobById);
-router.post("/job/update", updateJob);
-router.post("/job/delete", deleteJob);
+router.get("/job/getOne/:id", getJobById);
+router.post("/job/update/:id", updateJob);
+router.post("/job/delete/:id", deleteJob);
+
+//Review
+// router.get("/getAccout", getAccounts)
 
 //file
 // router.post("/blob", express.raw({ type: "*/*", limit: "50mb" }), HandleFile);

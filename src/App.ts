@@ -14,7 +14,6 @@ import { raw } from "express";
 import { HandleFile } from "./Controller/fileHandler";
 const app = express();
 
-
 const allowedOrigins = [
   "https://server.taxque.in",
   "http://server.taxque.in",

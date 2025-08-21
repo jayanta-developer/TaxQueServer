@@ -15,7 +15,7 @@ export const createJob = async (req: Request, res: Response): Promise<void> => {
 export const getAllJobs = async (req: Request, res: Response): Promise<void> => {
   try {
     const jobs = await Job.find();
-    res.status(200).json({ success: true, data: jobs });
+    res.status(200).json(jobs);
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -28,7 +28,7 @@ export const getJobById = async (req: Request, res: Response): Promise<void> => 
       res.status(404).json({ success: false, message: "Job not found" });
       return;
     }
-    res.status(200).json({ success: true, data: job });
+    res.status(200).json(job);
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
