@@ -72,6 +72,16 @@ const {
   deleteJob
 } = require("../Controller/job")
 
+//Application
+const {
+  createApplication,
+  getAllApplications,
+  getApplicationById,
+  updateApplication,
+  deleteApplication
+
+} = require("../Controller/Application")
+
 //review
 // const { getAccounts } = require("../Controller/GoogleReview")
 
@@ -172,6 +182,13 @@ router.get("/jobs", getAllJobs);
 router.get("/job/getOne/:id", getJobById);
 router.post("/job/update/:id", updateJob);
 router.post("/job/delete/:id", deleteJob);
+
+//Application
+router.post("/application/create", createApplication);
+router.get("/application", getAllApplications);
+router.get("/application/:id", getApplicationById);
+router.post("/application/update/:id", updateApplication);
+router.post("/application/delete/:id", deleteApplication);
 
 //Review
 // router.get("/getAccout", getAccounts)
