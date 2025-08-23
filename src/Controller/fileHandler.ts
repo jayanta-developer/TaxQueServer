@@ -22,7 +22,7 @@ export const HandleFile = async (
     res.json({ url: blob.url });
   } catch (err: any) {
     // console.error("Upload error details:", err?.message || err);
-    console.log("My errro message",err);
+    console.log("My errro message", err);
     res
       .status(500)
       .json({ error: "Upload failed", detail: err?.message || err });
