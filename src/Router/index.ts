@@ -14,28 +14,29 @@ const {
 //auth
 const { sendOTP, verifyOTP } = require("../Controller/otpAuth");
 
+// //category
+const {
+  createCategory,
+  getAllCategory,
+  getCategoryById,
+  deleteCategory,
+  updateCategoryById,
+} = require("../Controller/category");
+
 //service
 const {
   createService,
-  getAllServices,
+  getAllService,
   getServiceById,
+  updateService,
   deleteService,
-  updateServiceById,
-} = require("../Controller/service");
-
-//Product
-const {
-  createProduct,
-  getAllProducts,
-  updateProduct,
-  deleteProduct,
   AddFAQ,
   updateFAQ,
   DeleteFAQ,
   AddPriceItem,
   UpdatePrice,
   DeletePricePlan,
-} = require("../Controller/product");
+} = require("../Controller/service");
 
 //User
 const {
@@ -124,24 +125,25 @@ router.get(
   }
 );
 
-//service route
-router.post("/service/create", createService);
-router.get("/service", getAllServices);
-router.get("/service/:id", getServiceById);
-router.post("/service/delete/:id", deleteService);
-router.post("/service/update/:id", updateServiceById);
+//Category route
+router.post("/category/create", createCategory);
+router.get("/category", getAllCategory);
+router.get("/category/:id", getCategoryById);
+router.post("/category/delete/:id", deleteCategory);
+router.post("/category/update/:id", updateCategoryById);
 
-//product route
-router.post("/product/create", createProduct);
-router.get("/products", getAllProducts);
-router.post("/product/update/:id", updateProduct);
-router.post("/product/delete/:id", deleteProduct);
-router.post("/product/faq/add/:id", AddFAQ);
-router.post("/product/faq/update", updateFAQ);
-router.post("/product/faq/delete", DeleteFAQ);
-router.post("/product/price/add/:id", AddPriceItem);
-router.post("/product/price/update/:id/:priceItemId", UpdatePrice);
-router.post("/product/price/delete/:id/:priceItemId", DeletePricePlan);
+//Service route
+router.post("/service/create", createService);
+router.get("/service", getAllService);
+router.get("/service/:id", getServiceById);
+router.post("/service/update/:id", updateService);
+router.post("/service/delete/:id", deleteService);
+router.post("/service/faq/add/:id", AddFAQ);
+router.post("/service/faq/update", updateFAQ);
+router.post("/service/faq/delete", DeleteFAQ);
+router.post("/service/price/add/:id", AddPriceItem);
+router.post("/service/price/update/:id/:priceItemId", UpdatePrice);
+router.post("/service/price/delete/:id/:priceItemId", DeletePricePlan);
 
 //User
 router.post("/user/create", createUser);

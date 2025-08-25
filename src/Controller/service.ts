@@ -1,96 +1,254 @@
 import { Request, Response } from "express";
 const Service = require("../Module/service");
 
-// Create a new service
+// Create a new product
 export const createService = async (req: Request, res: Response) => {
   try {
-    const {
-      title,
-      summary,
-      imageUrl,
-      category,
-      imgAltTag,
-      metaTitle,
-      metaDescription,
-    } = req.body;
-    if (
-      !title ||
-      !summary ||
-      !imageUrl ||
-      !category ||
-      !imgAltTag ||
-      !metaTitle ||
-      !metaDescription
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-    const newService = new Service({
-      title,
-      summary,
-      imageUrl,
-      category,
-      imgAltTag,
-      metaTitle,
-      metaDescription,
-    });
-    await newService.save();
+    const newProduct = new Service(req.body);
+    await newProduct.save();
 
-    res
-      .status(201)
-      .json({ message: "Service created successfully", service: newService });
+    res.status(201).json({ success: true, product: newProduct });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-    console.log(error);
+    console.error("Error creating product:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
-// Get all services
-export const getAllServices = async (_req: Request, res: Response) => {
+// Get all products
+export const getAllService = async (req: Request, res: Response) => {
   try {
-    const services = await Service.find();
-    res.status(200).json(services);
+    const products = await Service.find();
+    res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching products" });
   }
 };
 
-// Get a single service by ID
+// Get a product by ID
 export const getServiceById = async (req: Request, res: Response) => {
   try {
-    const service = await Service.findById(req.params.id);
-    if (!service) return res.status(404).json({ message: "Service not found" });
-
-    res.status(200).json(service);
+    const product = await Service.findById(req.params.id);
+    if (!product)
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    res.status(200).json(product);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ success: false, message: "Error fetching product" });
   }
 };
 
-// Get a single service by ID
-export const updateServiceById = async (req: Request, res: Response) => {
+// Update a product
+export const updateService = async (req: Request, res: Response) => {
   try {
-    const updateService = await Service.findByIdAndUpdate(
+    const updatedProduct = await Service.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    if (!updateService)
-      return res.status(404).json({ message: "Service not found" });
 
-    res.status(200).json(updateService);
+    if (!updatedProduct)
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+
+    res.status(200).json({ success: true, product: updatedProduct });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ success: false, message: "Error updating product" });
   }
 };
 
-// Delete service
+// Delete a product
 export const deleteService = async (req: Request, res: Response) => {
   try {
-    const service = await Service.findByIdAndDelete(req.params.id);
-    if (!service) return res.status(404).json({ message: "Service not found" });
-
-    res.status(200).json({ message: "Service deleted successfully" });
+    const deletedProduct = await Service.findByIdAndDelete(req.params.id);
+    if (!deletedProduct)
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    res
+      .status(200)
+      .json({ success: true, message: "Product deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ success: false, message: "Error deleting product" });
+  }
+};
+
+//Create FAQ
+export const AddFAQ = async (req: Request, res: Response) => {
+  try {
+    const { question, answer } = req.body;
+    const { id } = req.params;
+
+    if (!question || !answer) {
+      return res
+        .status(400)
+        .json({ message: "Question and answer are required." });
+    }
+
+    const updatedProduct = await Service.updateOne(
+      { _id: id },
+      { $push: { FAQ: { question, answer } } }
+    );
+
+    if (updatedProduct.modifiedCount === 0) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+    res
+      .status(201)
+      .json({ message: "FAQ added successfully.", updatedProduct });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error adding FAQ.", error });
+  }
+};
+
+// Update an existing FAQ
+export const updateFAQ = async (req: Request, res: Response) => {
+  try {
+    const { question, answer, productId, faqId } = req.body;
+
+    if (!question && !answer) {
+      return res.status(400).json({
+        message: "At least one field (question or answer) is required.",
+      });
+    }
+
+    const updatedProduct = await Service.findOneAndUpdate(
+      { _id: productId, "FAQ._id": faqId }, // Find product with matching FAQ
+      {
+        $set: {
+          "FAQ.$.question": question,
+          "FAQ.$.answer": answer,
+        },
+      },
+      { new: true, runValidators: false } // Prevent full schema validation
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product or FAQ not found." });
+    }
+
+    res.status(200).json({
+      message: "FAQ updated successfully.",
+      updatedFAQ: updatedProduct.FAQ,
+    });
+  } catch (error) {
+    console.error("Error updating FAQ:", error);
+    res.status(500).json({ message: "Error updating FAQ.", error });
+  }
+};
+
+// Delete FAQ
+export const DeleteFAQ = async (req: Request, res: Response) => {
+  try {
+    const { productId, faqId } = req.body;
+
+    const product = await Service.findByIdAndUpdate(
+      productId,
+      { $pull: { FAQ: { _id: faqId } } },
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    res.status(200).json({ message: "FAQ deleted successfully.", product });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting FAQ.", error });
+  }
+};
+
+//Add Price
+export const AddPriceItem = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { title, basicPrice, price, plan, summary, fetures, MostPopular } =
+      req.body;
+
+    if (!title || !basicPrice || !price || !plan || !summary || !fetures) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+    const GetProduct = await Service.updateOne(
+      { _id: id },
+      {
+        $push: {
+          priceData: {
+            title,
+            basicPrice,
+            price,
+            plan,
+            summary,
+            fetures,
+            MostPopular,
+          },
+        },
+      }
+    );
+
+    if (GetProduct.modifiedCount === 0) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    res.status(201).json({ message: "Price item added successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error adding price item.", error });
+  }
+};
+
+export const UpdatePrice = async (req: Request, res: Response) => {
+  try {
+    const { id, priceItemId } = req.params;
+    const { title, basicPrice, price, plan, summary, fetures, MostPopular } =
+      req.body;
+
+    const updateResult = await Service.updateOne(
+      { _id: id, "priceData._id": priceItemId },
+      {
+        $set: {
+          "priceData.$.title": title,
+          "priceData.$.basicPrice": basicPrice,
+          "priceData.$.price": price,
+          "priceData.$.plan": plan,
+          "priceData.$.summary": summary,
+          "priceData.$.fetures": fetures,
+          "priceData.$.MostPopular": MostPopular,
+        },
+      }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Product or Price Item not found." });
+    }
+
+    res.status(200).json({ message: "Price item updated successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating price item.", error });
+  }
+};
+
+export const DeletePricePlan = async (req: Request, res: Response) => {
+  try {
+    const { id, priceItemId } = req.params;
+
+    const updateResult = await Service.updateOne(
+      { _id: id },
+      { $pull: { priceData: { _id: priceItemId } } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Service or Price Item not found." });
+    }
+
+    res.status(200).json({ message: "Price item deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting price item.", error });
   }
 };
