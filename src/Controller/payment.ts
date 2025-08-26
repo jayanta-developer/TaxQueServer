@@ -37,6 +37,7 @@ export const VerifyPayment = async (req: Request, res: Response) => {
     razorpay_signature,
     userId,
     serviceId,
+    purchasePlan
   } = req.body;
 
   const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -53,6 +54,7 @@ export const VerifyPayment = async (req: Request, res: Response) => {
           purchase: {
             productId: serviceId,
             orderData: new Date().toISOString().split("T")[0],
+            purchasePlan
           },
         },
       }

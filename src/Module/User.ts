@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const product = new mongoose.Schema({
   productId: String,
+  purchasePlan: String,
   orderData: {
     type: String,
     required: true,
