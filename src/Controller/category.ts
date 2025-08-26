@@ -60,7 +60,7 @@ export const getAllCategory = async (_req: Request, res: Response) => {
 // Get a single service by ID
 export const getCategoryById = async (req: Request, res: Response) => {
   try {
-    const service = await Category.findById(req.params.id);
+    const service = await Category.findOne({ Slug: req.params.slug });
     if (!service) return res.status(404).json({ message: "Service not found" });
 
     res.status(200).json(service);

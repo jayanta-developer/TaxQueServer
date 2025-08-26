@@ -29,7 +29,7 @@ export const getAllService = async (req: Request, res: Response) => {
 // Get a product by ID
 export const getServiceById = async (req: Request, res: Response) => {
   try {
-    const product = await Service.findById(req.params.id);
+    const product = await Service.findOne({ Slug: req.params.slug });
     if (!product)
       return res
         .status(404)

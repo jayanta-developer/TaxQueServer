@@ -204,7 +204,7 @@ const productPriceItem = new mongoose.Schema({
   plan: {
     type: String,
     required: true,
-    enum: ["Quarterly", "Monthly ", "Annually"],
+    enum: ["Quarterly", "Monthly ", "Annually", "OneTime"],
     default: "Monthly"
   },
   summary: {

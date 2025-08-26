@@ -128,14 +128,14 @@ router.get(
 //Category route
 router.post("/category/create", createCategory);
 router.get("/category", getAllCategory);
-router.get("/category/:id", getCategoryById);
+router.get("/category/:slug", getCategoryById);
 router.post("/category/delete/:id", deleteCategory);
 router.post("/category/update/:id", updateCategoryById);
 
 //Service route
 router.post("/service/create", createService);
 router.get("/service", getAllService);
-router.get("/service/:id", getServiceById);
+router.get("/service/:slug", getServiceById);
 router.post("/service/update/:id", updateService);
 router.post("/service/delete/:id", deleteService);
 router.post("/service/faq/add/:id", AddFAQ);
