@@ -13,13 +13,19 @@ const ContactUserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  city: {
-    type: String,
-    required: true,
-  },
-  pincode: {
-    type: String,
-    required: true,
+  location: {
+    city: {
+      type: String,
+      required: true,
+    },
+    pin: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      state: true,
+    }
   },
   date: String
 });

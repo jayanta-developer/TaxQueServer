@@ -24,6 +24,16 @@ export const GetBlogs = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal server error", error: error });
   }
 };
+export const GetOneBlog = async (req: Request, res: Response) => {
+  try {
+    const blog = await Blog.findOne({ Slug: req.params.slug });
+    res.status(200).json(blog);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", error: error });
+  }
+};
 
 export const UpdateBlog = async (req: Request, res: Response) => {
   try {

@@ -57,6 +57,7 @@ const {
 const {
   createBlog,
   GetBlogs,
+  GetOneBlog,
   UpdateBlog,
   DeleteBlog,
 } = require("../Controller/blog");
@@ -164,6 +165,7 @@ router.get("/contact-user", GetContactUsers);
 //Blos-
 router.post("/blog/create", createBlog);
 router.get("/blogs", GetBlogs);
+router.get("/blog/:slug", GetOneBlog);
 router.post("/blog/update/:id", UpdateBlog);
 router.post("/blog/delete/:id", DeleteBlog);
 
