@@ -9,10 +9,17 @@ const product = new mongoose.Schema({
   },
   requireDoc: [
     {
-      docTitle: String,
-      docUrl: [String],
-      status: String,
-      rejectMessage: String,
+      docCategory: String,
+      docUrlArray: [{
+        docTitle: String,
+        docUrl: String,
+        status: {
+          type: String,
+          enum: ["Pending", "Accept", "Rejected"],
+          default: "Pending",
+        },
+        rejectMessage: String,
+      }],
     },
   ],
 });

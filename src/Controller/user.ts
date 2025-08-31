@@ -76,19 +76,18 @@ export const UpdateProductDoc = async (req: Request, res: Response) => {
   try {
     const { userId, productId } = req.params;
     const updateData = req.body;
-
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
-
     // Find the product by _id inside the purchase array
-    const product = user.purchase.id(productId);
+    const product = user.purchase.find((val: any) => val.productId === productId);
     if (!product) {
       return res
         .status(404)
         .json({ message: "Product not found in user's purchase history." });
     }
+    console.log(product)
 
     product.requireDoc.push(...updateData);
     await user.save();
