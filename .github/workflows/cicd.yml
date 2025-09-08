@@ -28,13 +28,12 @@ jobs:
       - name: Generate Deployment Package
         run: zip -r nodejs-app-build.zip . -x "node_modules/*" ".git/*" "*.log"
 
-      - name: Deploy to EB
-        uses: einaregilssin/beanstalk-deploy@v21
+      - name: Deploy to Elastic Beanstalk
+        uses: aws-actions/beanstalk-deploy@v1
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'TaxQue'
-          environment_name: 'TaxQue-env'
-          version_label: ${{ github.sha }}
-          region: us-east-2
-          deployment_package: nodejs-app-build.zip
+          application-name: 'TaxQue'
+          environment-name: 'TaxQue-env'
+          version-label: ${{ github.sha }}
+          region: 'us-east-2'
+          bucket-name: ${{ secrets.S3_BUCKET_NAME }}
+          bucket-key: nodejs-app-build.zip
