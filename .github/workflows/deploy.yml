@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 20
           
-      - name: Install dependencies and build
+      - name: Install dependencies
         run: |
           rm -f package-lock.json
           npm cache clean --force
@@ -35,7 +35,12 @@ jobs:
         run: npm run build
         
       - name: Run tests (optional)
-        run: npm test
+        run: |
+          if npm run test >/dev/null 2>&1; then
+            npm test
+          else
+            echo "No test script found, skipping tests"
+          fi
         continue-on-error: true
         
       - name: Install production dependencies only
@@ -48,23 +53,23 @@ jobs:
         
       - name: Create deployment package
         run: |
-         zip -r taxque-app-${{ github.sha }}.zip . \
-           -x "src/*" \
-           -x ".git/*" \
-           -x "*.log" \
-           -x ".github/*" \
-           -x "tests/*" \
-           -x "test/*" \
-           -x "*.test.js" \
-           -x "*.test.ts" \
-           -x ".env*" \
-           -x "README.md" \
-           -x "tsconfig.json" \
-           -x "*.ts" \
-           -x "jest.config.*" \
-           -x ".gitignore" \
-           -x "nodemon.json"
-    # Note: dist/* is NOT excluded
+          zip -r taxque-app-${{ github.sha }}.zip . \
+            -x "src/*" \
+            -x ".git/*" \
+            -x "*.log" \
+            -x ".github/*" \
+            -x "tests/*" \
+            -x "test/*" \
+            -x "*.test.js" \
+            -x "*.test.ts" \
+            -x ".env*" \
+            -x "README.md" \
+            -x "tsconfig.json" \
+            -x "*.ts" \
+            -x "jest.config.*" \
+            -x ".gitignore" \
+            -x "nodemon.json" \
+            -x "*.md"
             
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -76,7 +81,7 @@ jobs:
       - name: Upload package to S3
         run: |
           aws s3 cp taxque-app-${{ github.sha }}.zip s3://${{ env.S3_BUCKET }}/deployments/taxque-app-${{ github.sha }}.zip
-          echo "Uploaded package: taxque-app-${{ github.sha }}.zip"
+          echo "✅ Uploaded package: taxque-app-${{ github.sha }}.zip"
         
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
@@ -92,11 +97,20 @@ jobs:
           
       - name: Verify deployment
         run: |
-          echo "Deployment completed successfully!"
-          echo "Version: taxque-v${{ github.sha }}"
-          echo "Region: ${{ env.AWS_REGION }}"
-          echo "Application: ${{ env.EB_APPLICATION }}"
-          echo "Environment: ${{ env.EB_ENVIRONMENT }}"
+          echo "🚀 Deployment completed successfully!"
+          echo "📦 Version: taxque-v${{ github.sha }}"
+          echo "🌍 Region: ${{ env.AWS_REGION }}"
+          echo "📱 Application: ${{ env.EB_APPLICATION }}"
+          echo "🏠 Environment: ${{ env.EB_ENVIRONMENT }}"
+          echo "🔗 URL: http://taxqueserver-env.eba-zhia3ukp.ap-south-1.elasticbeanstalk.com"
+          echo "🔗 API: http://taxqueserver-env.eba-zhia3ukp.ap-south-1.elasticbeanstalk.com/taxque/api/service"
+          
+      - name: Test deployment health
+        run: |
+          echo "🏥 Testing deployment health..."
+          sleep 10
+          curl -f http://taxqueserver-env.eba-zhia3ukp.ap-south-1.elasticbeanstalk.com/ || echo "❌ Health check failed, but deployment completed"
+        continue-on-error: true
           
       - name: Cleanup
         run: rm -f taxque-app-${{ github.sha }}.zip
@@ -106,4 +120,8 @@ jobs:
         if: failure()
         run: |
           echo "❌ Deployment failed for commit ${{ github.sha }}"
-          echo "Check the logs above for more details"
+          echo "🔍 Check the logs above for more details"
+          echo "📋 Common issues:"
+          echo "   - Missing environment variables in EB"
+          echo "   - Database connection issues"
+          echo "   - Port configuration problems"

@@ -12,22 +12,29 @@ const mongoose = require("mongoose");
 const fs = require('fs');
 import { raw } from "express";
 import { HandleFile } from "./Controller/fileHandler";
+
 const app = express();
 
+// ✅ CRITICAL FIX: Conditional SSL for different environments
+let httpsServer;
+if (process.env.NODE_ENV === 'production' && process.env.USE_SSL === 'true') {
+  try {
+    // SSL certificate paths (only for your custom domain)
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/privkey.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/fullchain.pem', 'utf8');
 
+    const credentials = {
+      key: privateKey,
+      cert: certificate
+    };
 
-// SSL certificate paths
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/fullchain.pem', 'utf8');
-
-const credentials = {
-  key: privateKey,
-  cert: certificate
-};
-
-// Create HTTPS server
-const httpsServer = https.createServer(credentials, app);
-
+    // Create HTTPS server only if SSL certs are available
+    httpsServer = https.createServer(credentials, app);
+    console.log('HTTPS server configured');
+  } catch (error) {
+    console.log('SSL certificates not found, using HTTP:', error);
+  }
+}
 
 const allowedOrigins = [
   "https://server.taxque.in",
@@ -38,6 +45,9 @@ const allowedOrigins = [
   "https://b.taxque.in/",
   "http://localhost:5173",
   "http://localhost:5174",
+  // ✅ ADD: EB domain to allowed origins
+  "http://taxqueserver-env.eba-zhia3ukp.ap-south-1.elasticbeanstalk.com",
+  "https://taxqueserver-env.eba-zhia3ukp.ap-south-1.elasticbeanstalk.com"
 ];
 
 mongoose
@@ -45,7 +55,7 @@ mongoose
   .then(() => console.log("Database connected successful!"))
   .catch((err: any) =>
     console.log(
-      "Database is not concocted to the server, you are offline:",
+      "Database is not connected to the server, you are offline:",
       err
     )
   );
@@ -61,10 +71,10 @@ app.use(
         return callback(null, true);
       }
       if (allowedOrigins.includes(origin)) {
-        console.log(origin);
-
+        console.log('Allowed origin:', origin);
         callback(null, true);
       } else {
+        console.log('Blocked origin:', origin);
         callback(null, false); // deny without crashing
       }
     },
@@ -72,12 +82,10 @@ app.use(
   })
 );
 
-
 app.use(cookieParser());
-// app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET || 'fallback-secret',
     resave: false,
     saveUninitialized: false,
   })
@@ -85,10 +93,18 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ✅ ADD: Health check route for EB
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'TaxQue Server is running',
+    port: process.env.PORT || 5000,
+    env: process.env.NODE_ENV || 'development'
+  });
+});
+
 app.post("/taxque/api/blob", raw({ type: "*/*", limit: "5mb" }), HandleFile);
-
 app.use("/taxque/api", Routes);
-
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);

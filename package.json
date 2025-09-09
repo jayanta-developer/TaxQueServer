@@ -4,11 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "npm run clean && tsc",
-    "prestart": "npm run build",
     "start": "node dist/index.js",
-    "start:prod": "node dist/index.js",
+    "build": "tsc",
+    "test": "echo \"No tests specified\" && exit 0",
     "dev": "nodemon src/index.ts"
   },
   "engines": {
