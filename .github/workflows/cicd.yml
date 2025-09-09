@@ -35,5 +35,5 @@ jobs:
           environment-name: 'TaxQue-env'
           version-label: ${{ github.sha }}
           region: 'us-east-2'
-          bucket-name: ${{ secrets.S3_BUCKET_NAME }}
-          bucket-key: nodejs-app-build.zip
+          deployment_package: nodejs-app-build.zip
+         
