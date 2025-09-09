@@ -7,35 +7,44 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Source
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Set Environment Variable
+      - name: Set NODE_ENV to production
         run: echo "NODE_ENV=production" >> $GITHUB_ENV
 
-      - name: Generate Deployment Package
+      - name: Package application
         run: zip -r nodejs-app-build.zip . -x "node_modules/*" ".git/*" "*.log"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Upload package to S3
+        run: aws s3 cp nodejs-app-build.zip s3://your-s3-bucket-name/nodejs-app-build.zip
+        # Replace 'your-s3-bucket-name' with your actual bucket name
 
       - name: Deploy to Elastic Beanstalk
         uses: aws-actions/beanstalk-deploy@v1
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application-name: 'TaxQue_Server'
-          environment-name: 'TaxQueServer-env'
+          application-name: 'TaxQue_Server'              # Replace with your EB application name
+          environment-name: 'TaxQueServer-env'          # Replace with your EB environment name
           version-label: ${{ github.sha }}
-          region: 'us-east-2'
-          deployment_package: nodejs-app-build.zip
-         
+          region: 'ap-south-1'
+          bucket-name: 'your-s3-bucket-name'           # Same as above
+          bucket-key: 'nodejs-app-build.zip'
