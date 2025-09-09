@@ -6,6 +6,12 @@ on:
       - master
       - main
 
+env:
+  AWS_REGION: ap-south-1
+  S3_BUCKET: taxque-deployment-bucket
+  EB_APPLICATION: TaxQue_Server
+  EB_ENVIRONMENT: TaxQueServer-env
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,7 +25,7 @@ jobs:
         with:
           node-version: 20
           
-      - name: Install dependencies
+      - name: Install dependencies and build
         run: |
           rm -f package-lock.json
           npm cache clean --force
@@ -32,6 +38,11 @@ jobs:
         run: npm test
         continue-on-error: true
         
+      - name: Install production dependencies only
+        run: |
+          rm -rf node_modules
+          npm ci --only=production
+        
       - name: Set NODE_ENV to production
         run: echo "NODE_ENV=production" >> $GITHUB_ENV
         
@@ -39,7 +50,6 @@ jobs:
         run: |
           zip -r taxque-app-${{ github.sha }}.zip . \
             -x "src/*" \
-            -x "node_modules/*" \
             -x ".git/*" \
             -x "*.log" \
             -x ".github/*" \
@@ -60,11 +70,11 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          aws-region: ${{ env.AWS_REGION }}
           
       - name: Upload package to S3
         run: |
-          aws s3 cp taxque-app-${{ github.sha }}.zip s3://taxque-deployment-bucket/deployments/taxque-app-${{ github.sha }}.zip
+          aws s3 cp taxque-app-${{ github.sha }}.zip s3://${{ env.S3_BUCKET }}/deployments/taxque-app-${{ github.sha }}.zip
           echo "Uploaded package: taxque-app-${{ github.sha }}.zip"
         
       - name: Deploy to Elastic Beanstalk
@@ -72,10 +82,10 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'TaxQue_Server'
-          environment_name: 'TaxQueServer-env'
+          application_name: ${{ env.EB_APPLICATION }}
+          environment_name: ${{ env.EB_ENVIRONMENT }}
           version_label: 'taxque-v${{ github.sha }}'
-          region: 'ap-south-1'
+          region: ${{ env.AWS_REGION }}
           deployment_package: taxque-app-${{ github.sha }}.zip
           wait_for_environment_recovery: 300
           
@@ -83,7 +93,16 @@ jobs:
         run: |
           echo "Deployment completed successfully!"
           echo "Version: taxque-v${{ github.sha }}"
+          echo "Region: ${{ env.AWS_REGION }}"
+          echo "Application: ${{ env.EB_APPLICATION }}"
+          echo "Environment: ${{ env.EB_ENVIRONMENT }}"
           
       - name: Cleanup
         run: rm -f taxque-app-${{ github.sha }}.zip
         if: always()
+        
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed for commit ${{ github.sha }}"
+          echo "Check the logs above for more details"
