@@ -67,14 +67,16 @@ jobs:
           echo "Uploaded package: taxque-app-${{ github.sha }}.zip"
         
       - name: Deploy to Elastic Beanstalk
-        uses: aws-actions/beanstalk-deploy@v21
+        uses: einaregilsson/beanstalk-deploy@v22
         with:
-          application-name: 'TaxQue_Server'
-          environment-name: 'TaxQueServer-env'
-          version-label: 'taxque-v${{ github.sha }}'
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: 'TaxQue_Server'
+          environment_name: 'TaxQueServer-env'
+          version_label: 'taxque-v${{ github.sha }}'
           region: 'ap-south-1'
-          deployment-package: taxque-app-${{ github.sha }}.zip
-          wait-for-environment-recovery: 300
+          deployment_package: taxque-app-${{ github.sha }}.zip
+          wait_for_environment_recovery: 300
           
       - name: Verify deployment
         run: |
