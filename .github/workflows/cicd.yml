@@ -2,8 +2,7 @@ name: deploy-typescript-app
 
 on:
   push:
-    branches:
-      - master
+    branches:     
       - main
 
 jobs:
