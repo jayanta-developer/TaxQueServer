@@ -17,16 +17,16 @@ const app = express();
 
 
 // SSL certificate paths
-// const privateKey = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/fullchain.pem', 'utf8');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/fullchain.pem', 'utf8');
 
-// const credentials = {
-//   key: privateKey,
-//   cert: certificate
-// };
+const credentials = {
+  key: privateKey,
+  cert: certificate
+};
 
 // Create HTTPS server
-// const httpsServer = https.createServer(credentials, app);
+const httpsServer = https.createServer(credentials, app);
 
 
 const allowedOrigins = [
