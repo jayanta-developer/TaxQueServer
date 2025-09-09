@@ -64,7 +64,7 @@ jobs:
           
       - name: Upload package to S3
         run: |
-          aws s3 cp taxque-app-${{ github.sha }}.zip s3://your-actual-s3-bucket-name/deployments/taxque-app-${{ github.sha }}.zip
+          aws s3 cp taxque-app-${{ github.sha }}.zip s3://taxque-deployment-bucket/deployments/taxque-app-${{ github.sha }}.zip
           echo "Uploaded package: taxque-app-${{ github.sha }}.zip"
         
       - name: Deploy to Elastic Beanstalk
