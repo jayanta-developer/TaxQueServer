@@ -21,11 +21,8 @@ jobs:
           
       - name: Install dependencies
         run: |
-          # Remove package-lock.json if it exists to avoid conflicts
           rm -f package-lock.json
-          # Clear npm cache to ensure clean install
           npm cache clean --force
-          # Install dependencies and generate fresh lock file
           npm install
         
       - name: Build TypeScript application
@@ -40,7 +37,6 @@ jobs:
         
       - name: Create deployment package
         run: |
-          # Create deployment package with compiled JavaScript and necessary files
           zip -r taxque-app-${{ github.sha }}.zip . \
             -x "src/*" \
             -x "node_modules/*" \
@@ -87,7 +83,6 @@ jobs:
         run: |
           echo "Deployment completed successfully!"
           echo "Version: taxque-v${{ github.sha }}"
-          echo "Check your Elastic Beanstalk environment for the new deployment."
           
       - name: Cleanup
         run: rm -f taxque-app-${{ github.sha }}.zip
