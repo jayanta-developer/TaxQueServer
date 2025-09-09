@@ -31,8 +31,8 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         uses: aws-actions/beanstalk-deploy@v1
         with:
-          application-name: 'TaxQue'
-          environment-name: 'TaxQue-env'
+          application-name: 'TaxQue_Server'
+          environment-name: 'TaxQueServer-env'
           version-label: ${{ github.sha }}
           region: 'us-east-2'
           deployment_package: nodejs-app-build.zip
