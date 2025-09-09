@@ -11,6 +11,9 @@
     "start:prod": "node dist/index.js",
     "dev": "nodemon src/index.ts"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

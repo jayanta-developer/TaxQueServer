@@ -48,22 +48,23 @@ jobs:
         
       - name: Create deployment package
         run: |
-          zip -r taxque-app-${{ github.sha }}.zip . \
-            -x "src/*" \
-            -x ".git/*" \
-            -x "*.log" \
-            -x ".github/*" \
-            -x "tests/*" \
-            -x "test/*" \
-            -x "*.test.js" \
-            -x "*.test.ts" \
-            -x ".env*" \
-            -x "README.md" \
-            -x "tsconfig.json" \
-            -x "*.ts" \
-            -x "jest.config.*" \
-            -x ".gitignore" \
-            -x "nodemon.json"
+         zip -r taxque-app-${{ github.sha }}.zip . \
+           -x "src/*" \
+           -x ".git/*" \
+           -x "*.log" \
+           -x ".github/*" \
+           -x "tests/*" \
+           -x "test/*" \
+           -x "*.test.js" \
+           -x "*.test.ts" \
+           -x ".env*" \
+           -x "README.md" \
+           -x "tsconfig.json" \
+           -x "*.ts" \
+           -x "jest.config.*" \
+           -x ".gitignore" \
+           -x "nodemon.json"
+    # Note: dist/* is NOT excluded
             
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
