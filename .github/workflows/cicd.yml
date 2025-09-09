@@ -31,6 +31,8 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         uses: aws-actions/beanstalk-deploy@v1
         with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application-name: 'TaxQue_Server'
           environment-name: 'TaxQueServer-env'
           version-label: ${{ github.sha }}
