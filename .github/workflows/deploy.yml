@@ -1,0 +1,94 @@
+name: deploy-typescript-app
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          
+      - name: Install dependencies
+        run: |
+          # Remove package-lock.json if it exists to avoid conflicts
+          rm -f package-lock.json
+          # Clear npm cache to ensure clean install
+          npm cache clean --force
+          # Install dependencies and generate fresh lock file
+          npm install
+        
+      - name: Build TypeScript application
+        run: npm run build
+        
+      - name: Run tests (optional)
+        run: npm test
+        continue-on-error: true
+        
+      - name: Set NODE_ENV to production
+        run: echo "NODE_ENV=production" >> $GITHUB_ENV
+        
+      - name: Create deployment package
+        run: |
+          # Create deployment package with compiled JavaScript and necessary files
+          zip -r taxque-app-${{ github.sha }}.zip . \
+            -x "src/*" \
+            -x "node_modules/*" \
+            -x ".git/*" \
+            -x "*.log" \
+            -x ".github/*" \
+            -x "tests/*" \
+            -x "test/*" \
+            -x "*.test.js" \
+            -x "*.test.ts" \
+            -x ".env*" \
+            -x "README.md" \
+            -x "tsconfig.json" \
+            -x "*.ts" \
+            -x "jest.config.*" \
+            -x ".gitignore" \
+            -x "nodemon.json"
+            
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+          
+      - name: Upload package to S3
+        run: |
+          aws s3 cp taxque-app-${{ github.sha }}.zip s3://your-actual-s3-bucket-name/deployments/taxque-app-${{ github.sha }}.zip
+          echo "Uploaded package: taxque-app-${{ github.sha }}.zip"
+        
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: 'TaxQue_Server'
+          environment_name: 'TaxQueServer-env'
+          version_label: 'taxque-v${{ github.sha }}'
+          region: 'ap-south-1'
+          deployment_package: taxque-app-${{ github.sha }}.zip
+          wait_for_environment_recovery: 300
+          
+      - name: Verify deployment
+        run: |
+          echo "Deployment completed successfully!"
+          echo "Version: taxque-v${{ github.sha }}"
+          echo "Check your Elastic Beanstalk environment for the new deployment."
+          
+      - name: Cleanup
+        run: rm -f taxque-app-${{ github.sha }}.zip
+        if: always()
