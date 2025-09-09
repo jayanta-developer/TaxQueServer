@@ -38,9 +38,7 @@ const allowedOrigins = [
   "https://b.taxque.in/",
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://your-production-site.com",
 ];
-
 
 mongoose
   .connect(process.env.DATABASE, {})
