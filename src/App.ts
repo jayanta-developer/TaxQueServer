@@ -32,8 +32,8 @@ const app = express();
 const allowedOrigins = [
   "https://server.taxque.in",
   "http://server.taxque.in",
-  "https://f.taxque.in/",
-  "https://b.taxque.in/",
+  "https://f.taxque.in",
+  "https://b.taxque.in",
   "http://localhost:5173",
   "http://localhost:5174",
   "https://your-production-site.com",
