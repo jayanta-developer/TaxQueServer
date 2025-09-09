@@ -31,7 +31,12 @@ const ContactUserSchema = new mongoose.Schema({
       state: true,
     }
   },
-  date: String
+  date: String,
+  section: {
+    type: String,
+    required: true,
+  },
+  service: String
 });
 
 module.exports = mongoose.model("contactUser", ContactUserSchema);

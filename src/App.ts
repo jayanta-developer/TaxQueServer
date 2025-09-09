@@ -14,12 +14,29 @@ import { raw } from "express";
 import { HandleFile } from "./Controller/fileHandler";
 const app = express();
 
+
+
+// SSL certificate paths
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/server.taxque.in/fullchain.pem', 'utf8');
+
+// const credentials = {
+//   key: privateKey,
+//   cert: certificate
+// };
+
+// Create HTTPS server
+// const httpsServer = https.createServer(credentials, app);
+
+
 const allowedOrigins = [
   "https://server.taxque.in",
   "http://server.taxque.in",
-  "https://f.taxque.in",
-  "https://b.taxque.in",
-  "http://localhost:5173/"
+  "https://f.taxque.in/",
+  "https://b.taxque.in/",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://your-production-site.com",
 ];
 
 
@@ -34,11 +51,28 @@ mongoose
   );
 
 app.use(express.json({ limit: "5mb" }));
-app.use(express.raw({ type: "*/*", limit: "5mb" }));
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) {
+        // allow requests with no origin (like Postman or server-to-server)
+        return callback(null, true);
+      }
+      if (allowedOrigins.includes(origin)) {
+        console.log(origin);
+
+        callback(null, true);
+      } else {
+        callback(null, false); // deny without crashing
+      }
+    },
+    credentials: true,
+  })
+);
+
+
 app.use(cookieParser());
 // app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(
